@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/yaml.v2"
@@ -23,6 +24,7 @@ func PostRepo(c *gin.Context) {
 	user := session.User(c)
 	owner := c.Param("owner")
 	name := c.Param("name")
+	paramNoActivate := c.Request.FormValue("no-activate")
 
 	if user == nil {
 		c.AbortWithStatus(403)
@@ -83,12 +85,19 @@ func PostRepo(c *gin.Context) {
 	keys.Public = string(crypto.MarshalPublicKey(&key.PublicKey))
 	keys.Private = string(crypto.MarshalPrivateKey(key))
 
-	// activate the repository before we make any
-	// local changes to the database.
-	err = remote.Activate(user, r, keys, link)
+	var noActivate bool
+	noActivate, err = strconv.ParseBool(paramNoActivate)
 	if err != nil {
-		c.String(500, err.Error())
-		return
+		noActivate = false
+	}
+	if !noActivate {
+		// activate the repository before we make any
+		// local changes to the database.
+		err = remote.Activate(user, r, keys, link)
+		if err != nil {
+			c.AbortWithError(500, err)
+			return
+		}
 	}
 
 	// persist the repository
@@ -153,7 +162,32 @@ func PatchRepo(c *gin.Context) {
 }
 
 func GetRepo(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, session.Repo(c))
+	db := context.Database(c)
+	repo := session.Repo(c)
+	user := session.User(c)
+	if user == nil {
+		c.IndentedJSON(http.StatusOK, repo)
+		return
+	}
+
+	// if the user is authenticated we should
+	// check to see if they've starred the repository
+	repo.IsStarred, _ = model.GetStar(db, user, repo)
+	repoResp := struct {
+		*model.Repo
+		Token string `json:"hook_token,omitempty"`
+	}{repo, ""}
+	if user.Admin {
+		t := token.New(token.HookToken, repo.FullName)
+		sig, err := t.Sign(repo.Hash)
+		if err != nil {
+			log.Errorf("Error creating hook token: %s", err)
+		} else {
+			repoResp.Token = sig
+		}
+	}
+
+	c.IndentedJSON(http.StatusOK, repoResp)
 }
 
 func GetRepoKey(c *gin.Context) {
@@ -176,7 +210,7 @@ func PostRepoKey(c *gin.Context) {
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		c.String(500, "Error reading private key from body. %s", err)
-		return	
+		return
 	}
 	pkey := crypto.UnmarshalPrivateKey(body)
 	if pkey == nil {
