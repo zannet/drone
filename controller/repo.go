@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/yaml.v2"
 
@@ -162,7 +163,6 @@ func PatchRepo(c *gin.Context) {
 }
 
 func GetRepo(c *gin.Context) {
-	db := context.Database(c)
 	repo := session.Repo(c)
 	user := session.User(c)
 	if user == nil {
@@ -170,9 +170,6 @@ func GetRepo(c *gin.Context) {
 		return
 	}
 
-	// if the user is authenticated we should
-	// check to see if they've starred the repository
-	repo.IsStarred, _ = model.GetStar(db, user, repo)
 	repoResp := struct {
 		*model.Repo
 		Token string `json:"hook_token,omitempty"`
