@@ -24,13 +24,14 @@ gen_static:
 	mkdir -p static/docs_gen/api static/docs_gen/build
 	mkdir -p static/docs_gen/api static/docs_gen/plugin
 	mkdir -p static/docs_gen/api static/docs_gen/setup
-	go generate github.com/CiscoCloud/drone/static
+	mkdir -p static/docs_gen/api static/docs_gen/cli
+	go generate github.com/drone/drone/static
 
 gen_template:
-	go generate github.com/CiscoCloud/drone/template
+	go generate github.com/drone/drone/template
 
 gen_migrations:
-	go generate github.com/CiscoCloud/drone/shared/database
+	go generate github.com/drone/drone/store/migration
 
 build:
 	go build
@@ -40,6 +41,14 @@ build_static:
 
 test:
 	go test -cover $(PACKAGES)
+
+# docker run --publish=3306:3306 -e MYSQL_DATABASE=test -e MYSQL_ALLOW_EMPTY_PASSWORD=yes  mysql:5.6.27
+test_mysql:
+	DATABASE_DRIVER="mysql" DATABASE_CONFIG="root@tcp(127.0.0.1:3306)/test?parseTime=true" go test github.com/drone/drone/model
+
+# docker run --publish=5432:5432 postgres:9.4.5
+test_postgres:
+	DATABASE_DRIVER="postgres" DATABASE_CONFIG="host=127.0.0.1 user=postgres dbname=postgres sslmode=disable" go test github.com/drone/drone/model
 
 deb:
 	mkdir -p contrib/debian/drone/usr/local/bin

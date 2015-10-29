@@ -3,9 +3,9 @@ package session
 import (
 	"net/http"
 
-	"github.com/CiscoCloud/drone/model"
-	"github.com/CiscoCloud/drone/router/middleware/context"
-	"github.com/CiscoCloud/drone/shared/token"
+	"github.com/drone/drone/model"
+	"github.com/drone/drone/shared/token"
+	"github.com/drone/drone/store"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,9 +39,8 @@ func SetUser() gin.HandlerFunc {
 		var user *model.User
 
 		t, err := token.ParseRequest(c.Request, func(t *token.Token) (string, error) {
-			var db = context.Database(c)
 			var err error
-			user, err = model.GetUserLogin(db, t.Text)
+			user, err = store.GetUserLogin(c, t.Text)
 			return user.Hash, err
 		})
 		if err == nil {
