@@ -114,13 +114,54 @@ func Test_parse(t *testing.T) {
 		})
 
 		g.It("Should correct a malformed avatar url", func() {
-			var urls = []string{
-				"http://gogs.golang.org///1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
-				"//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+
+			var urls = []struct {
+				Before string
+				After  string
+			}{
+				{
+					"http://gogs.golang.org///1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+					"//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+				},
+				{
+					"//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+					"//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+				},
+				{
+					"http://gogs.golang.org/avatars/1",
+					"http://gogs.golang.org/avatars/1",
+				},
+				{
+					"http://gogs.golang.org//avatars/1",
+					"http://gogs.golang.org/avatars/1",
+				},
 			}
+
 			for _, url := range urls {
-				url = fixMalformedAvatar(url)
-				g.Assert(url).Equal("//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87")
+				got := fixMalformedAvatar(url.Before)
+				g.Assert(got).Equal(url.After)
+			}
+		})
+
+		g.It("Should expand the avatar url", func() {
+			var urls = []struct {
+				Before string
+				After  string
+			}{
+				{
+					"/avatars/1",
+					"http://gogs.io/avatars/1",
+				},
+				{
+					"//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+					"//1.gravatar.com/avatar/8c58a0be77ee441bb8f8595b7f1b4e87",
+				},
+			}
+
+			var repo = "http://gogs.io/foo/bar"
+			for _, url := range urls {
+				got := expandAvatar(repo, url.Before)
+				g.Assert(got).Equal(url.After)
 			}
 		})
 	})
