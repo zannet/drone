@@ -64,7 +64,10 @@ func PatchUser(c *gin.Context) {
 }
 
 func PostUser(c *gin.Context) {
-	in := &model.User{}
+	in := &struct{
+    	model.User
+        Token string `json:"oauth_token"`
+	}{}
 	err := c.Bind(in)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
@@ -75,6 +78,7 @@ func PostUser(c *gin.Context) {
 	user.Login = in.Login
 	user.Email = in.Email
 	user.Admin = in.Admin
+	user.Token = in.Token
 	user.Avatar = in.Avatar
 	user.Active = true
 	user.Hash = crypto.Rand()
