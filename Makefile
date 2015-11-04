@@ -5,6 +5,7 @@ PACKAGES = $(shell go list ./... 2> /dev/null | grep -v /vendor/)
 all: gen build
 
 deps:
+	(cd ~ && go get -u -v -x github.com/go-swagger/go-swagger/... || (git --version && cd $(GOPATH)/src/github.com/go-swagger/go-swagger && git submodule update --init --recursive) ) && exit 1
 	go get -u golang.org/x/tools/cmd/cover
 	go get -u golang.org/x/tools/cmd/vet
 	go get -u github.com/kr/vexp
@@ -15,7 +16,6 @@ deps:
 	go get -u github.com/dchest/jsmin
 	go get -u github.com/franela/goblin
 	cat ~/.gitconfig .git/config || exit 0
-	(go get -u -v -x github.com/go-swagger/go-swagger/... || (git --version && cd $(GOPATH)/src/github.com/go-swagger/go-swagger && git submodule update --init --recursive) ) && exit 1
 	go get -u github.com/PuerkitoBio/goquery
 	go get -u github.com/russross/blackfriday
 
