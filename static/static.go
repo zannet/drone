@@ -7,7 +7,7 @@ import (
 )
 
 //go:generate go run ../contrib/generate-js.go -dir scripts/ -o scripts_gen/drone.min.js
-//go:generate go run ../contrib/generate-api-docs.go -input ../docs/swagger.yml  -template ../template/amber/swagger.amber -output docs_gen/api/index.html
+//#go:generate go run ../contrib/generate-api-docs.go -input ../docs/swagger.yml  -template ../template/amber/swagger.amber -output docs_gen/api/index.html
 //go:generate go run ../contrib/generate-docs.go -input ../docs/build/README.md  -name Builds  -template ../template/amber/docs.amber -output docs_gen/build/
 //go:generate go run ../contrib/generate-docs.go -input ../docs/plugin/README.md -name Plugins -template ../template/amber/docs.amber -output docs_gen/plugin/
 //go:generate go run ../contrib/generate-docs.go -input ../docs/setup/README.md  -name Install -template ../template/amber/docs.amber -output docs_gen/setup/
