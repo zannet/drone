@@ -83,4 +83,7 @@ publish:
     password: $$DOCKER_PASS
     when:
       repo: benschumacher/drone
+    tag:
+      - latest
+      - $$CI_BUILD_NUMBER
 
