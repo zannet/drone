@@ -74,3 +74,13 @@ publish:
     when:
       repo: drone/drone
       branch: master
+
+  docker:
+    registry: shippedrepos-docker-drone.bintray.io
+    repo: benschumacher/drone
+    email: $$DOCKER_EMAIL
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    when:
+      repo: benschumacher/drone
+
