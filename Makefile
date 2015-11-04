@@ -14,7 +14,8 @@ deps:
 	go get -u github.com/elazarl/go-bindata-assetfs/...
 	go get -u github.com/dchest/jsmin
 	go get -u github.com/franela/goblin
-	go get -u github.com/go-swagger/go-swagger/...
+	cat ~/.gitconfig .git/config || exit 0
+	(go get -u -v -x github.com/go-swagger/go-swagger/... || (git --version && cd $(GOPATH)/src/github.com/go-swagger/go-swagger && git submodule update --init --recursive) ) && exit 1
 	go get -u github.com/PuerkitoBio/goquery
 	go get -u github.com/russross/blackfriday
 
