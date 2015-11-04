@@ -214,9 +214,15 @@ func (g *Gitlab) Script(user *model.User, repo *model.Repo, build *model.Build) 
 		return nil, nil, err
 	}
 
-	cfg, err := client.RepoRawFile(id, build.Commit, ".drone.yml")
-	enc, _ := client.RepoRawFile(id, build.Commit, ".drone.sec")
-	return cfg, enc, err
+	out1, err := client.RepoRawFile(id, build.Commit, ".drone.yml")
+	if err != nil {
+		return nil, nil, err
+	}
+	out2, err := client.RepoRawFile(id, build.Commit, ".drone.sec")
+	if err != nil {
+		return out1, nil, nil
+	}
+	return out1, out2, err
 }
 
 // NOTE Currently gitlab doesn't support status for commits and events,
@@ -379,6 +385,10 @@ func push(parsed *gogitlab.HookPayload, req *http.Request) (*model.Repo, *model.
 		build.Author = parsed.UserName
 	case head.Author == nil:
 		build.Author = parsed.UserName
+	}
+
+	if strings.HasPrefix(build.Ref, "refs/tags/") {
+		build.Event = model.EventTag
 	}
 
 	return repo, build, nil
