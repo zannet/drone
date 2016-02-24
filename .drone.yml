@@ -49,13 +49,12 @@ publish:
 
   docker:
     registry: shippedrepos-docker-drone.bintray.io
-    repo: benschumacher/drone
+    repo: devel/drone
     email: $$DOCKER_EMAIL
     username: $$DOCKER_USER
     password: $$DOCKER_PASS
     tag:
-      - "pr.${CI_PULL_REQUEST}"
+      - "$${COMMIT:0:8}"
     when:
       owner: CiscoCloud
-      event: pull_request
 
