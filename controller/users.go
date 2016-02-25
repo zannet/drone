@@ -75,9 +75,9 @@ func PatchUser(c *gin.Context) {
 }
 
 func PostUser(c *gin.Context) {
-	in := &struct{
-    	model.User
-        Token string `json:"oauth_token"`
+	in := &struct {
+		model.User
+		Token string `json:"token,omitempty"`
 	}{}
 	err := c.Bind(in)
 	if err != nil {
