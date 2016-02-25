@@ -8,6 +8,7 @@ import (
 	"github.com/drone/drone/model"
 	"github.com/drone/drone/router/middleware/session"
 	"github.com/drone/drone/shared/crypto"
+	"github.com/drone/drone/shared/token"
 	"github.com/drone/drone/store"
 )
 
@@ -28,7 +29,17 @@ func GetUser(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, user)
+	token := token.New(token.UserToken, user.Login)
+	tokenstr, err := token.Sign(user.Hash)
+	if err != nil {
+		tokenstr = ""
+	}
+	userWithToken := struct {
+		*model.User
+		Token string `json:"token,omitempty"`
+	}{user, tokenstr}
+
+	c.IndentedJSON(http.StatusOK, userWithToken)
 }
 
 func PatchUser(c *gin.Context) {
