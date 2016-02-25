@@ -3,6 +3,8 @@ package session
 import (
 	"net/http"
 
+	log "github.com/Sirupsen/logrus"
+
 	"github.com/drone/drone/model"
 	"github.com/drone/drone/shared/token"
 	"github.com/drone/drone/store"
@@ -68,6 +70,7 @@ func SetUser() gin.HandlerFunc {
 func MustAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := User(c)
+		log.Infof("User `%s` is not admin", user.Login)
 		switch {
 		case user == nil:
 			c.AbortWithStatus(http.StatusUnauthorized)
@@ -85,6 +88,7 @@ func MustAdmin() gin.HandlerFunc {
 func MustUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := User(c)
+		log.Infof("User `%s` is not admin", user.Login)
 		switch {
 		case user == nil:
 			c.AbortWithStatus(http.StatusUnauthorized)
