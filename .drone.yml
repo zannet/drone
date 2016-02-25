@@ -49,6 +49,19 @@ publish:
 
   docker:
     registry: shippedrepos-docker-drone.bintray.io
+    repo: drone
+    email: $$DOCKER_EMAIL
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    tag:
+      - latest
+      - "$${COMMIT:0:8}"
+    when:
+      owner: CiscoCloud
+      branch: Missing-Drone-Token
+
+  docker:
+    registry: shippedrepos-docker-drone.bintray.io
     repo: benschumacher/drone
     email: $$DOCKER_EMAIL
     username: $$DOCKER_USER
