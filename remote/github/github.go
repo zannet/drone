@@ -271,7 +271,8 @@ func (g *Github) Activate(u *model.User, r *model.Repo, k *model.Key, link strin
 		}
 	}
 
-	_, err = CreateUpdateHook(client, r.Owner, r.Name, link)
+    // This is now handled by the shipped API hook
+	// _, err = CreateUpdateHook(client, r.Owner, r.Name, link)
 	return err
 }
 
