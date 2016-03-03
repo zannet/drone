@@ -44,7 +44,10 @@ func GetUser(c *gin.Context) {
 
 func PatchUser(c *gin.Context) {
 	me := session.User(c)
-	in := &model.User{}
+	in := &struct {
+		model.User
+		Token string `json:"token,omitempty"`
+	}{}
 	err := c.Bind(in)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
