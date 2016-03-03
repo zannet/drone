@@ -57,6 +57,7 @@ func PatchUser(c *gin.Context) {
 		return
 	}
 	user.Admin = in.Admin
+	user.Token = in.Token
 	user.Active = in.Active
 
 	// cannot update self
