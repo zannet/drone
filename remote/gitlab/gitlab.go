@@ -9,13 +9,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/drone/drone/model"
-	"github.com/drone/drone/shared/envconfig"
-	"github.com/drone/drone/shared/httputil"
-	"github.com/drone/drone/shared/oauth2"
-	"github.com/drone/drone/shared/token"
+	"github.com/CiscoCloud/drone/model"
+	"github.com/CiscoCloud/drone/shared/envconfig"
+	"github.com/CiscoCloud/drone/shared/httputil"
+	"github.com/CiscoCloud/drone/shared/oauth2"
+	"github.com/CiscoCloud/drone/shared/token"
 
-	"github.com/drone/drone/remote/gitlab/client"
+	"github.com/CiscoCloud/drone/remote/gitlab/client"
 )
 
 const (

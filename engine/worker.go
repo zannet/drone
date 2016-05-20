@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/drone/drone/shared/docker"
+	"github.com/CiscoCloud/drone/shared/docker"
 	"github.com/samalba/dockerclient"
 )
 

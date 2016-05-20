@@ -10,15 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/drone/drone/engine"
-	"github.com/drone/drone/model"
-	"github.com/drone/drone/remote"
-	"github.com/drone/drone/router/middleware/context"
-	"github.com/drone/drone/shared/httputil"
-	"github.com/drone/drone/shared/token"
-	"github.com/drone/drone/store"
-	"github.com/drone/drone/yaml"
-	"github.com/drone/drone/yaml/matrix"
+	"github.com/CiscoCloud/drone/engine"
+	"github.com/CiscoCloud/drone/model"
+	"github.com/CiscoCloud/drone/remote"
+	"github.com/CiscoCloud/drone/router/middleware/context"
+	"github.com/CiscoCloud/drone/shared/httputil"
+	"github.com/CiscoCloud/drone/shared/token"
+	"github.com/CiscoCloud/drone/store"
+	"github.com/CiscoCloud/drone/yaml"
+	"github.com/CiscoCloud/drone/yaml/matrix"
 )
 
 var skipRe = regexp.MustCompile(`\[(?i:ci *skip|skip *ci)\]`)

@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/drone/drone/remote/gitlab/client"
+	"github.com/CiscoCloud/drone/remote/gitlab/client"
 )
 
 const (
