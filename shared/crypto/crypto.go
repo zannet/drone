@@ -7,8 +7,8 @@ import (
 	"encoding/pem"
 	"io"
 
-	"code.google.com/p/go.crypto/ssh"
 	"github.com/square/go-jose"
+	"golang.org/x/crypto/ssh"
 )
 
 const (

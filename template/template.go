@@ -18,7 +18,7 @@ package template
 //go:generate sh -c "amberc amber/user.amber           > amber_gen/user.html"
 //go:generate sh -c "amberc amber/nodes.amber          > amber_gen/nodes.html"
 
-//go:generate go-bindata -pkg template -o template_gen.go amber_gen/
+//go:generate go-bindata-assetfs -pkg template -o template_gen.go amber_gen/
 
 import (
 	"encoding/json"

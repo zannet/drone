@@ -41,6 +41,9 @@ type PullRequest struct {
 	HTMLURL      *string    `json:"html_url,omitempty"`
 	IssueURL     *string    `json:"issue_url,omitempty"`
 	StatusesURL  *string    `json:"statuses_url,omitempty"`
+	DiffURL      *string    `json:"diff_url,omitempty"`
+	PatchURL     *string    `json:"patch_url,omitempty"`
+	Assignee     *User      `json:"assignee,omitempty"` // probably only in webhooks
 
 	Head *PullRequestBranch `json:"head,omitempty"`
 	Base *PullRequestBranch `json:"base,omitempty"`
@@ -72,6 +75,15 @@ type PullRequestListOptions struct {
 
 	// Base filters pull requests by base branch name.
 	Base string `url:"base,omitempty"`
+
+	// Sort specifies how to sort pull requests. Possible values are: created,
+	// updated, popularity, long-running. Default is "created".
+	Sort string `url:"sort,omitempty"`
+
+	// Direction in which to sort pull requests. Possible values are: asc, desc.
+	// If Sort is "created" or not specified, Default is "desc", otherwise Default
+	// is "asc"
+	Direction string `url:"direction,omitempty"`
 
 	ListOptions
 }
